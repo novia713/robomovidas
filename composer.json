@@ -1,0 +1,15 @@
+{
+    "name": "leandro713/robomovidas",
+    "description": "Robo toying",
+    "require": {
+        "symfony/yaml": "^3.0"
+    },
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "leandro713",
+            "email": "leandro@leandro.org"
+        }
+    ],
+    "minimum-stability": "dev"
+}

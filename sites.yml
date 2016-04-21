@@ -1,0 +1,6 @@
+drupal8:
+  path:     "/home/leandro/public_html/drupal8.dev"
+  code_dir: "/home/leandro/public_html/drupal8.dev/modules/custom/dni_login/"
+tompok:
+  path:     "/home/leandro/public_html/tompok"
+  code_dir: "/home/leandro/public_html/tompok/sites/all/modules/"
