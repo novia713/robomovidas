@@ -9,6 +9,10 @@
  */
 
 require "vendor/autoload.php";
+
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
+
 /**
  *
  */
@@ -16,6 +20,8 @@ class RoboFile extends \Robo\Tasks {
 
   protected  $yaml;
   protected  $sites;
+  protected  $notifier;
+  protected  $notif_title;
 
 
   /**
@@ -23,6 +29,8 @@ class RoboFile extends \Robo\Tasks {
    */
   public function __construct() {
 
+    $this->notifier = NotifierFactory::create();
+    $notif_title = "Robomovidas";
     $this->yaml = new Symfony\Component\Yaml\Parser();
     $this->sites = $this->yaml->parse(file_get_contents('./sites.yml'));
   }
@@ -38,6 +46,7 @@ class RoboFile extends \Robo\Tasks {
             ->arg('all')
             ->option("root", $this->sites[$site]['path'])
             ->run();
+    $this->send_notif($this->notif_title, "La caché ha sido eliminada");
   }
 
   /**
@@ -50,6 +59,7 @@ class RoboFile extends \Robo\Tasks {
             ->option("standard=", "Drupal,DrupalPractice")
             ->arg($file)
             ->run();
+    $this->send_notif($this->notif_title, "PHPCBF ejecutado");
   }
 
   /**
@@ -120,6 +130,16 @@ class RoboFile extends \Robo\Tasks {
             ->version($version)
             ->change("released to github")
             ->run();
+  }
+
+  private function send_notif($title, $body) {
+
+    $notification =
+      (new Notification())
+      ->setTitle( $title )
+      ->setBody( $body );
+
+    $this->notifier->send($notification);
   }
 
 }

@@ -2,7 +2,8 @@
     "name": "leandro713/robomovidas",
     "description": "Robo toying",
     "require": {
-        "symfony/yaml": "^3.0"
+        "symfony/yaml": "^3.0",
+        "jolicode/jolinotif": "^1.0"
     },
     "license": "AGPL",
     "authors": [
