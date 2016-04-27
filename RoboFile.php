@@ -10,19 +10,20 @@
 
 require "vendor/autoload.php";
 
+use Symfony\Component\Yaml\Parser;
+use Robo\Tasks;
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
 
 /**
  *
  */
-class RoboFile extends \Robo\Tasks {
+class RoboFile extends Tasks {
 
   protected  $yaml;
   protected  $sites;
   protected  $notifier;
   protected  $notif_title;
-
 
   /**
    *
@@ -31,7 +32,7 @@ class RoboFile extends \Robo\Tasks {
 
     $this->notifier = NotifierFactory::create();
     $notif_title = "Robomovidas";
-    $this->yaml = new Symfony\Component\Yaml\Parser();
+    $this->yaml = new Parser();
     $this->sites = $this->yaml->parse(file_get_contents('./sites.yml'));
   }
 
@@ -83,22 +84,22 @@ class RoboFile extends \Robo\Tasks {
     $this->taskWatch()
             ->monitor(
               $this->sites[$site]['code_dir'], function ($event) use ($site) {
-                  if ($event->getTypeString() !== 'modify') {
-                      return;
-                  }
-                  else {
+                if ($event->getTypeString() !== 'modify') {
+                    return;
+                }
+                else {
 
-                      $this->cc($site);
+                    $this->cc($site);
 
-                      $this->phpcbf((string) $event->getResource());
+                    $this->phpcbf((string) $event->getResource());
 
-                      /*
-                      if (file_exists((string) $event->getResource())) {
-                      $this->qa((string) $event->getResource());
-                      }
-                      */
+                    /*
+                    if (file_exists((string) $event->getResource())) {
+                    $this->qa((string) $event->getResource());
+                    }
+                    */
 
-                  }
+                }
               }
             )
         ->run();
@@ -132,12 +133,15 @@ class RoboFile extends \Robo\Tasks {
             ->run();
   }
 
+  /**
+   *
+   */
   private function send_notif($title, $body) {
 
     $notification =
       (new Notification())
-      ->setTitle( $title )
-      ->setBody( $body );
+      ->setTitle($title)
+      ->setBody($body);
 
     $this->notifier->send($notification);
   }
