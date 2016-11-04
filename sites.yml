@@ -4,3 +4,6 @@ drupal8:
 tompok:
   path:     "/home/leandro/public_html/tompok"
   code_dir: "/home/leandro/public_html/tompok/sites/all/modules/"
+secundario:
+  path:     "/home/leandro/public_html/secundario.dev"
+  code_dir: "/home/leandro/public_html/secundario.dev/web/modules/custom/"

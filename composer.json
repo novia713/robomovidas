@@ -3,7 +3,9 @@
     "description": "Robo toying",
     "require": {
         "symfony/yaml": "^3.0",
-        "jolicode/jolinotif": "^1.0"
+        "jolicode/jolinotif": "^1.0",
+        "league/climate": "^3.2",
+        "henrikbjorn/lurker": "^1.2"
     },
     "license": "AGPL",
     "authors": [
@@ -12,5 +14,10 @@
             "email": "leandro@leandro.org"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+
+		"require-dev": {
+			"codegyre/robo": "*",
+			"squizlabs/php_codesniffer": "2.*"
+		}
 }

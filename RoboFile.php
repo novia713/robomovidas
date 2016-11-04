@@ -42,10 +42,9 @@ class RoboFile extends Tasks {
   public function cc($site) {
 
     $this->say("Clearing cache in " . $this->sites[$site]['path']);
-    $this->taskExec('drupal')
-            ->arg('cr')
-            ->arg('all')
-            ->option("root", $this->sites[$site]['path'])
+    $this->taskExec('../vendor/bin/drupal')
+						->dir($this->sites[$site]['path'] . "/web/")
+            ->args(['cache:rebuild', 'all'])
             ->run();
     $this->send_notif($this->notif_title, "La caché ha sido eliminada");
   }
@@ -57,7 +56,8 @@ class RoboFile extends Tasks {
 
     $this->say("Executing phpcbf over " . $file);
     $this->taskExec('phpcbf')
-            ->option("standard=", "Drupal,DrupalPractice")
+            ->option("--standard=PEAR")
+            ->option("--no-patch")
             ->arg($file)
             ->run();
     $this->send_notif($this->notif_title, "PHPCBF ejecutado");
