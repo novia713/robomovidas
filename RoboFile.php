@@ -6,6 +6,14 @@
  * @see http://robo.li/
  *
  * @author leandro713 <leandro@leandro.org>
+ *
+ * @usage
+ *    - vendor/codegyre/robo/robo wd secundario → para sitios Drupal
+ * 		- vendor/codegyre/robo/robo wp zl-feeds-supervisor → para sitios PHP
+ *
+ * @TODO:
+ *    - icon in notifications
+ *
  */
 
 require "vendor/autoload.php";
@@ -46,7 +54,11 @@ class RoboFile extends Tasks {
 						->dir($this->sites[$site]['path'] . "/web/")
             ->args(['cache:rebuild', 'all'])
             ->run();
-    $this->send_notif($this->notif_title, "La caché ha sido eliminada");
+    $this->send_notif(
+				$this->notif_title,
+				"La caché ha sido eliminada",
+				__DIR__.'/img/druplicon.png'
+		);
   }
 
   /**
@@ -55,12 +67,21 @@ class RoboFile extends Tasks {
   public function phpcbf($file) {
 
     $this->say("Executing phpcbf over " . $file);
-    $this->taskExec('phpcbf')
+    $this->taskExec('vendor/bin/phpcbf')
+						->dir(__DIR__)
             ->option("--standard=PEAR")
             ->option("--no-patch")
+            ->option("--colors")
             ->arg($file)
             ->run();
-    $this->send_notif($this->notif_title, "PHPCBF ejecutado");
+
+    $this->send_notif(
+				$this->notif_title,
+				"PHPCBF ejecutado",
+				__DIR__.'/img/php-logo.png'
+		);
+
+		return;
   }
 
   /**
@@ -77,9 +98,9 @@ class RoboFile extends Tasks {
 
   /**
    * Performs determined actions on each file modification
-   * in the $code_dir directory.
+   * in the $code_dir directory [DRUPAL SITE]
    */
-  public function watch($site) {
+  public function wd($site) {
 
     $this->taskWatch()
             ->monitor(
@@ -89,9 +110,9 @@ class RoboFile extends Tasks {
                 }
                 else {
 
-                    $this->cc($site);
-
                     $this->phpcbf((string) $event->getResource());
+
+                    $this->cc($site);
 
                     /*
                     if (file_exists((string) $event->getResource())) {
@@ -104,6 +125,30 @@ class RoboFile extends Tasks {
             )
         ->run();
   }
+
+  /**
+   * Performs determined actions on each file modification
+   * in the $code_dir directory. [VANILLA PHP]
+   */
+  public function wp($site) {
+
+    $this->taskWatch()
+            ->monitor(
+              $this->sites[$site]['code_dir'], function ($event) use ($site) {
+                if ($event->getTypeString() !== 'modify') {
+                    return;
+                }
+                else {
+										if ( strpos( $event->getResource(), ".php") >= 1 ) {
+											$this->phpcbf((string) $event->getResource());
+										}
+
+                }
+              }
+            )
+        ->run();
+  }
+
 
   /**
    * Shows configuration in the YML file for a given site.
@@ -136,12 +181,13 @@ class RoboFile extends Tasks {
   /**
    *
    */
-  private function send_notif($title, $body) {
+  private function send_notif($title, $body, $icon_file) {
 
     $notification =
       (new Notification())
       ->setTitle($title)
-      ->setBody($body);
+      ->setBody($body)
+      ->setIcon($icon_file);
 
     $this->notifier->send($notification);
   }

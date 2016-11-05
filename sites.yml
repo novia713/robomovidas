@@ -7,3 +7,9 @@ tompok:
 secundario:
   path:     "/home/leandro/public_html/secundario.dev"
   code_dir: "/home/leandro/public_html/secundario.dev/web/modules/custom/"
+secundario:
+  path:     "/home/leandro/public_html/secundario.dev"
+  code_dir: "/home/leandro/public_html/secundario.dev/web/modules/custom/"
+zl-feeds:
+  path:     "/home/leandro/git/zl-feeds-supervisor"
+  code_dir: "/home/leandro/git/zl-feeds-supervisor"

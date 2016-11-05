@@ -7,7 +7,7 @@
         "league/climate": "^3.2",
         "henrikbjorn/lurker": "^1.2"
     },
-    "license": "AGPL",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "leandro713",
